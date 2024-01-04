@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Programming Languages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+  <h1 class="my-3">List of Programming Languages</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Designed by</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @programming_language.each do |programming_language| %>
+        <tr>
+          <td><%= programming_language[:Name] %></td>
+          <td><%= programming_language[:Type] %></td>
+          <td><%= programming_language[:"Designed by"] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
+
+
