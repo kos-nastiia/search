@@ -1,8 +1,8 @@
 <div class="container">
 
-  <%= form_with(url: search_programming_language_path, method: :get, data: { turbo_frame: "programming_language" }) do |form| %>
+  <%= form_with(url: search_programming_language_path, method: :get, data: { controller: "search-form", turbo_frame: "programming_language" }) do |form| %>
     <div class="input-group my-3">
-      <%= form.text_field :query, class: "form-control", placeholder: "Search" %>
+      <%= form.text_field :query, class: "form-control", data: {action: "input->search-form#search"}, placeholder: "Search" %>
       <button class="btn btn-success" type="submit">Go</button>
     </div>
   <% end %>
