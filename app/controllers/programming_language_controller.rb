@@ -19,7 +19,7 @@ class ProgrammingLanguageController < ApplicationController
 
   private
 
-  def sort_query(search_query)
+  def sort_query(search_query) # determine whether the request was positive or negative
     positive_query = []
     negative_query = []
 
@@ -34,7 +34,7 @@ class ProgrammingLanguageController < ApplicationController
     [positive_query, negative_query]
   end
 
-  def filter_programming_languages(positive_query, negative_query)
+  def filter_programming_languages(positive_query, negative_query) # choose the required language depending on the input
     if positive_query.present?
       @programming_languages.filter do |language|
         positive_matches = positive_query.all? do |word|
