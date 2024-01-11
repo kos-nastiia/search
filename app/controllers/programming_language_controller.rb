@@ -1,25 +1,28 @@
+# frozen_string_literal: true
+
+# Controller for managing programming languages
 class ProgrammingLanguageController < ApplicationController
   def index
-    @programming_language = DATA
+    @programming_languages = DATA
   end
 
   def search
     @programming_languages = DATA
     search_query = params[:query]&.downcase
-    
+
     positive_query, negative_query = sort_query(search_query)
-    
+
     @search_results = filter_programming_languages(positive_query, negative_query)
-    
-    render turbo_stream: turbo_stream.replace("programming_language",
-      partial: "programming_language/table",
-      locals: { programming_language: @search_results }
-    )
+
+    render turbo_stream: turbo_stream.replace('programming_language',
+                                              partial: 'programming_language/table',
+                                              locals: { programming_languages: @search_results })
   end
 
   private
 
-  def sort_query(search_query) # determine whether the request was positive or negative
+  # determine whether the request was positive or negative
+  def sort_query(search_query)
     positive_query = []
     negative_query = []
 
@@ -34,27 +37,34 @@ class ProgrammingLanguageController < ApplicationController
     [positive_query, negative_query]
   end
 
-  def filter_programming_languages(positive_query, negative_query) # choose the required language depending on the input
+  # choose the required language depending on the input
+  def filter_programming_languages(positive_query, negative_query)
     if positive_query.present?
-      @programming_languages.filter do |language|
-        positive_matches = positive_query.all? do |word|
-          language.values.any? { |value| value.to_s.downcase.include?(word) }
-        end
-  
-        negative_matches = negative_query.any? do |word|
-          language.values.any? { |value| value.to_s.downcase.include?(word) }
-        end
-  
-        positive_matches && !negative_matches
-      end
+      positive_filter(positive_query, negative_query)
     else
-      @programming_languages.reject do |language|
-        negative_query.any? do |word|
-          language.values.any? { |value| value.to_s.downcase.include?(word) }
-        end
-      end
+      negative_filter(negative_query)
     end
-
   end
 
+  def positive_filter(positive_query, negative_query)
+    @programming_languages.filter do |language|
+      positive_matches = positive_query.all? do |word|
+        language.values.any? { |value| value.to_s.downcase.include?(word) }
+      end
+
+      negative_matches = negative_query.any? do |word|
+        language.values.any? { |value| value.to_s.downcase.include?(word) }
+      end
+
+      positive_matches && !negative_matches
+    end
+  end
+
+  def negative_filter(negative_query)
+    @programming_languages.reject do |language|
+      negative_query.any? do |word|
+        language.values.any? { |value| value.to_s.downcase.include?(word) }
+      end
+    end
+  end
 end
