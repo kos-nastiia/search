@@ -3,7 +3,7 @@
 # Controller for managing programming languages
 class ProgrammingLanguageController < ApplicationController
   def index
-    @programming_languages = DATA
+    @programming_language = DATA
   end
 
   def search
@@ -16,12 +16,11 @@ class ProgrammingLanguageController < ApplicationController
 
     render turbo_stream: turbo_stream.replace('programming_language',
                                               partial: 'programming_language/table',
-                                              locals: { programming_languages: @search_results })
+                                              locals: { programming_language: @search_results })
   end
 
   private
 
-  # determine whether the request was positive or negative
   def sort_query(search_query)
     positive_query = []
     negative_query = []
@@ -37,16 +36,15 @@ class ProgrammingLanguageController < ApplicationController
     [positive_query, negative_query]
   end
 
-  # choose the required language depending on the input
   def filter_programming_languages(positive_query, negative_query)
     if positive_query.present?
-      positive_filter(positive_query, negative_query)
+      filter_positive(positive_query, negative_query)
     else
-      negative_filter(negative_query)
+      filter_negative(negative_query)
     end
   end
 
-  def positive_filter(positive_query, negative_query)
+  def filter_positive(positive_query, negative_query)
     @programming_languages.filter do |language|
       positive_matches = positive_query.all? do |word|
         language.values.any? { |value| value.to_s.downcase.include?(word) }
@@ -60,7 +58,7 @@ class ProgrammingLanguageController < ApplicationController
     end
   end
 
-  def negative_filter(negative_query)
+  def filter_negative(negative_query)
     @programming_languages.reject do |language|
       negative_query.any? do |word|
         language.values.any? { |value| value.to_s.downcase.include?(word) }
