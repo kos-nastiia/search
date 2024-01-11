@@ -1,20 +1,20 @@
 <%= turbo_frame_tag "programming_language" do %>
- <table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Designed by</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% programming_language.each do |programming_language| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= programming_language[:Name] %></td>
-        <td><%= programming_language[:Type] %></td>
-        <td><%= programming_language[:"Designed by"] %></td>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Designed by</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% programming_language.each do |programming_language| %>
+        <tr>
+          <td><%= programming_language[:Name] %></td>
+          <td><%= programming_language[:Type] %></td>
+          <td><%= programming_language[:"Designed by"] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
