@@ -1,10 +1,14 @@
-class ProgrammingLanguageService
-  def initialize(programming_languages)
-    @programming_languages = programming_languages
+# frozen_string_literal: true
+
+# service for filter query
+class FilterProgrammingLanguageService
+  def initialize(search_query)
+    @search_query = search_query
+    @programming_languages = DATA
   end
 
-  def filter_programming_languages(search_query)
-    positive_query, negative_query = sort_query(search_query)
+  def call
+    positive_query, negative_query = sort_query
 
     if positive_query.present?
       filter_positive(positive_query, negative_query)
@@ -15,7 +19,9 @@ class ProgrammingLanguageService
 
   private
 
-  def sort_query(search_query)
+  attr_reader :search_query, :programming_languages
+
+  def sort_query
     positive_query = []
     negative_query = []
 
@@ -31,7 +37,7 @@ class ProgrammingLanguageService
   end
 
   def filter_positive(positive_query, negative_query)
-    @programming_languages.filter do |language|
+    programming_languages.filter do |language|
       positive_matches = positive_query.all? do |word|
         language.values.any? { |value| value.to_s.downcase.include?(word) }
       end
@@ -45,7 +51,7 @@ class ProgrammingLanguageService
   end
 
   def filter_negative(negative_query)
-    @programming_languages.reject do |language|
+    programming_languages.reject do |language|
       negative_query.any? do |word|
         language.values.any? { |value| value.to_s.downcase.include?(word) }
       end
