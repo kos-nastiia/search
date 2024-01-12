@@ -7,11 +7,11 @@ RSpec.describe FilterProgrammingLanguageService, type: :service do
   let(:expected_result) { DATA }
   let(:not_expected_result) { DATA }
 
-  subject(:service_call) { FilterProgrammingLanguageService.new(search.downcase).call }
+  subject(:service_call) { described_class.new(search.downcase).call }
 
   describe '#filter_programming_languages' do
     context 'list of languages' do
-      subject(:service_call) { FilterProgrammingLanguageService.new(search).call }
+      subject(:service_call) { described_class.new(search).call }
 
       it 'returns all programming languages when no query is provided' do
         expect(service_call).to match_array(expected_result)
